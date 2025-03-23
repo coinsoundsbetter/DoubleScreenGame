@@ -29,9 +29,14 @@ namespace Code.Client.Player {
             _camera.SetTarget(_view.GetCameraTarget());
         }
 
+        public override void Destroy() {
+            _input.Clear();
+        }
+
         public override void Update() {
             _input.Update();
             ControlBodyDir();
+            ControlMove();
         }
 
         public override void LateUpdate() {
@@ -39,28 +44,33 @@ namespace Code.Client.Player {
         }
 
         private void ControlBodyDir() {
-            /*int xRotate = 0;
-            if (_input.Move.x > 0) {
-                xRotate = 1;
-            }else if (_input.Move.x < 0) {
-                xRotate = -1;
+            var inputX = _input.Move.x;
+            var inputY = _input.Move.y;
+            if (inputX == 0 && inputY == 0) {
+                return;
             }
             
-            // 控制角色的左右转向
-            Vector3 rightInPlane = default;
-            if (xRotate == 1) {
-                rightInPlane = new Vector3(_camera.GetRight().x, 0, _camera.GetRight().z);
-            }else if (xRotate == -1) {
-                rightInPlane = new Vector3(_camera.GetRight().x, 0, _camera.GetRight().z) * -1;
-            }
-            if (rightInPlane != Vector3.zero) {
-                var targetRotation = Quaternion.LookRotation(rightInPlane, Vector3.up);
-                _view.GetBodyDir().rotation = Quaternion.Slerp(_view.GetBodyDir().rotation, targetRotation, Time.deltaTime * 10f);
+            var cameraRight = _camera.GetRight().SetY(0);
+            var cameraForward = _camera.GetForward().SetY(0);
+            Vector3 inputDir = cameraRight * inputX + cameraForward * inputY;
+            Quaternion bodyTargetRotation = Quaternion.LookRotation(inputDir);
+            Quaternion bodyNowRotation = Quaternion.Slerp(_view.GetBodyRotation(), bodyTargetRotation, Time.deltaTime * 10f);
+            _view.SetBodyRotation(bodyNowRotation);
+        }
+
+        private void ControlMove() {
+            var inputX = _input.Move.x;
+            var inputY = _input.Move.y;
+            var inputNum = Mathf.Max(Mathf.Abs(inputX), Mathf.Abs(inputY));
+            _view.SetMoveAnim(inputNum);
+            if (inputX == 0 && inputY == 0) {
+                return;
             }
             
-            // 控制角色向镜头方向转向
-            Vector3 forwardInPlane = default;*/
-            
+            var moveDir = (_camera.GetRight() * inputX + _camera.GetForward() * inputY).normalized;
+            var moveSpeed = 10f * inputNum;
+            Vector3 moveMotion = moveDir * moveSpeed * Time.deltaTime;
+            _view.MoveOnce(moveMotion);
         }
     }
 }

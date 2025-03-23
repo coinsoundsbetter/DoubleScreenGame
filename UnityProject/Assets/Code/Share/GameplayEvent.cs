@@ -21,6 +21,7 @@ namespace Code {
             OnPlayerConnected = null;
             OnPlayerDisconnected = null;
             OnPlayerReconnected = null;
+            SpawnServerPlayer = null;
         }
     }
 }

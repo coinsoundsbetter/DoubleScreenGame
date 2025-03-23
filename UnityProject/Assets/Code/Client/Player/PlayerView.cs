@@ -8,6 +8,18 @@ namespace Code.Client.Player {
         [SerializeField] private Transform bodyDir;
         
         public Transform GetCameraTarget() => cameraTarget;
-        public Transform GetBodyDir() => bodyDir;
+        public Quaternion GetBodyRotation() => bodyDir.rotation;
+
+        public void SetBodyRotation(Quaternion rotation) {
+            bodyDir.rotation = rotation;
+        }
+
+        public void MoveOnce(Vector3 motion) {
+            cc.Move(motion);
+        }
+
+        public void SetMoveAnim(float moveValue) {
+            animator.SetFloat("Move", moveValue);
+        }
     }
 }

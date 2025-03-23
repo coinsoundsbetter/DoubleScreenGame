@@ -18,6 +18,7 @@ namespace Code {
         
         private void OnDestroy() {
             ShutGame();
+            Instance = null;
         }
 
         private void Update() {
@@ -32,7 +33,7 @@ namespace Code {
 
         private bool isEnter;
         private void OnGUI() {
-            if (GUILayout.Button("以主机开始游戏") && !isEnter) {
+            if (!isEnter && GUILayout.Button("以主机开始游戏")) {
                 EnterGame(true, true);
                 isEnter = true;
             }

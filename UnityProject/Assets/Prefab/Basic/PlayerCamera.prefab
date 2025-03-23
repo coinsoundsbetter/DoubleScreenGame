@@ -142,5 +142,5 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   defaultOffset: {x: 0, y: 0, z: 5}
-  defaultFollowSpeed: 5
+  defaultFollowSpeed: {x: 30, y: 30, z: 15}
   defaultRotateSpeed: 30

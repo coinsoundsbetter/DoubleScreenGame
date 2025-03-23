@@ -14,7 +14,7 @@ namespace Code.Client.Player {
         }
 
         [SerializeField] private Vector3 defaultOffset = new Vector3(0, 0, 5f);
-        [SerializeField] private float defaultFollowSpeed = 5f;
+        [SerializeField] private Vector3 defaultFollowSpeed = new Vector3(30, 30, 5);
         [SerializeField] private float defaultRotateSpeed = 30f;
         
         private Transform followTarget;
@@ -41,12 +41,10 @@ namespace Code.Client.Player {
                          - followTarget.forward * defaultOffset.z 
                          - followTarget.right * defaultOffset.x
                          - followTarget.up * defaultOffset.y;
-            
-            if (Vector3.SqrMagnitude(nowPos - endPos) > 0.01f) {
-                nowPos = Vector3.MoveTowards(nowPos, endPos, Time.deltaTime * defaultFollowSpeed);
-            }
+            nowPos.x = Mathf.MoveTowards(nowPos.x, endPos.x, Time.deltaTime * defaultFollowSpeed.x);
+            nowPos.y = Mathf.MoveTowards(nowPos.y, endPos.y, Time.deltaTime * defaultFollowSpeed.y);
+            nowPos.z = Mathf.MoveTowards(nowPos.z, endPos.z, Time.deltaTime * defaultFollowSpeed.z);
             transform.position = nowPos;
-            transform.LookAt(followTarget);
         }
 
         public Vector3 GetRight() => cam.transform.right;
