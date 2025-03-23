@@ -1,20 +1,19 @@
-using System;
-using System.Collections.Generic;
-using Code.Features;
 using Unity.Netcode;
 using UnityEngine;
 
 namespace Code {
     public class GameContext : MonoBehaviour {
-        [SerializeField] private Camera mainCamera;
         public static GameContext Instance { get; private set; }
         public FeatureManager ClientFeatures { get; private set; }
         public FeatureManager ServerFeatures { get; private set; }
         public bool IsStartClient { get; private set; }
         public bool IsStartServer { get; private set; }
 
+        public GamePrefabSO GamePrefabs;
+
         private void Awake() {
             Instance = this;
+            DontDestroyOnLoad(gameObject);
         }
         
         private void OnDestroy() {
@@ -25,10 +24,17 @@ namespace Code {
             ClientFeatures?.Update();
             ServerFeatures?.Update();
         }
-        
+
+        private void LateUpdate() {
+            ClientFeatures?.LateUpdate();
+            ServerFeatures?.LateUpdate();
+        }
+
+        private bool isEnter;
         private void OnGUI() {
-            if (GUILayout.Button("以主机开始游戏")) {
+            if (GUILayout.Button("以主机开始游戏") && !isEnter) {
                 EnterGame(true, true);
+                isEnter = true;
             }
         }
 
@@ -40,8 +46,8 @@ namespace Code {
             if (isServer) {
                 ServerFeatures = new FeatureManager();
                 ServerFeatures.CreateBatch()
-                    .Add<ServerConnectionManager>()
-                    .Add<ServerPlayerManager>()
+                    .Add<Server.Connection.ConnectionManager>()
+                    .Add<Server.Player.PlayerManager>()
                     .OnCreateAll();
             }
             
@@ -49,8 +55,8 @@ namespace Code {
             if (isClient) {
                 ClientFeatures = new FeatureManager();
                 ClientFeatures.CreateBatch()
-                    .Add<ClientConnectionManager>()
-                    .Add<ClientPlayerManager>()
+                    .Add<Client.Connection.ConnectionManager>()
+                    .Add<Client.Player.PlayerManager>()
                     .OnCreateAll();
             }
             

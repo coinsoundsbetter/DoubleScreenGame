@@ -28,6 +28,18 @@ namespace Code {
             }
         }
 
+        public void LateUpdate() {
+            foreach (var feature in allFeatures.Values) {
+                if (feature is IEnableFeature enableFeature && !enableFeature.IsEnabled()) {
+                    continue;
+                }
+
+                if (feature is ILateUpdateFeature lateUpdateFeature) {
+                    lateUpdateFeature.OnLateUpdate(ref shareState);
+                }
+            }
+        }
+
         public void Add(Type type, IFeature feature) {
             allFeatures.Add(type.Name, feature);
         }
