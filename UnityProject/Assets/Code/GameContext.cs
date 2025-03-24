@@ -56,6 +56,7 @@ namespace Code {
             if (isClient) {
                 ClientFeatures = new FeatureManager();
                 ClientFeatures.CreateBatch()
+                    .Add<Client.Input.GameInput>()
                     .Add<Client.Connection.ConnectionManager>()
                     .Add<Client.Player.PlayerManager>()
                     .OnCreateAll();

@@ -15,3 +15,4 @@ MonoBehaviour:
   PlayerNet: {fileID: 3343229482533905743, guid: 9c70c4f3dc951e64fb1573ef326db4d0, type: 3}
   PlayerView: {fileID: 6360798462672486608, guid: 852153224d08eda49b4b9c00c70e4576, type: 3}
   PlayerCamera: {fileID: 1021612225684703348, guid: bb5cabd2add9d53428d7c94d2fadd0b9, type: 3}
+  PlayerInputManager: {fileID: 6988819199570836924, guid: 58d7b1b164c4a294ab3e59cac2f3dbba, type: 3}

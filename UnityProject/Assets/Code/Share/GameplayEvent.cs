@@ -1,4 +1,5 @@
 using System;
+using Code.Client.Input;
 using Code.Mix;
 
 namespace Code {
@@ -14,6 +15,9 @@ namespace Code {
         
         // 服务器专属
         public static Action<int, ulong> SpawnServerPlayer;
+        
+        // 输入状态
+        public static Action<int, GameInput.PlayerInputState> OnInputStateTick;
 
         public static void ClearAll() {
             OnPlayerNetSpawn = null;
@@ -22,6 +26,7 @@ namespace Code {
             OnPlayerDisconnected = null;
             OnPlayerReconnected = null;
             SpawnServerPlayer = null;
+            OnInputStateTick = null;
         }
     }
 }

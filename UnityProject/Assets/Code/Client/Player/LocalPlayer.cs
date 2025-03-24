@@ -5,7 +5,7 @@ namespace Code.Client.Player {
     /// 本地玩家逻辑
     /// </summary>
     public class LocalPlayer : Player {
-        private PlayerInput _input;
+        private PlayerInputHandler _input;
         private PlayerCamera _camera;
         private PlayerView _view;
         public int LocalPlayerIndex { get; set; }
@@ -22,8 +22,8 @@ namespace Code.Client.Player {
             _camera.SetDisplay(LocalPlayerIndex);
             
             // 创建输入
-            _input = new PlayerInput();
-            _input.Bind(LocalPlayerIndex);
+            _input = new PlayerInputHandler();
+            _input.Init();
             
             // 设置相机跟随目标
             _camera.SetTarget(_view.GetCameraTarget());
@@ -34,7 +34,6 @@ namespace Code.Client.Player {
         }
 
         public override void Update() {
-            _input.Update();
             ControlBodyDir();
             ControlMove();
         }
@@ -44,8 +43,8 @@ namespace Code.Client.Player {
         }
 
         private void ControlBodyDir() {
-            var inputX = _input.Move.x;
-            var inputY = _input.Move.y;
+            var inputX = _input.TargetMove.x;
+            var inputY = _input.TargetMove.y;
             if (inputX == 0 && inputY == 0) {
                 return;
             }
@@ -59,8 +58,8 @@ namespace Code.Client.Player {
         }
 
         private void ControlMove() {
-            var inputX = _input.Move.x;
-            var inputY = _input.Move.y;
+            var inputX = _input.SmoothMove.x;
+            var inputY = _input.SmoothMove.y;
             var inputNum = Mathf.Max(Mathf.Abs(inputX), Mathf.Abs(inputY));
             _view.SetMoveAnim(inputNum);
             if (inputX == 0 && inputY == 0) {
