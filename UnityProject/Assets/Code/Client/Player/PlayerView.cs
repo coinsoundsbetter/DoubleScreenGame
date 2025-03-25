@@ -21,5 +21,13 @@ namespace Code.Client.Player {
         public void SetMoveAnim(float moveValue) {
             animator.SetFloat("Move", moveValue);
         }
+
+        public void SetPosition(Vector3 position) {
+            transform.position = position;
+        }
+
+        public bool IsGrounded() {
+            return cc.isGrounded;
+        }
     }
 }

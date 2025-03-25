@@ -10,6 +10,9 @@ namespace Code.Client.Player {
         public Vector2 TargetMove { get; private set; }
         private Vector2 smoothMoveVelocity;
         private const float moveChangeDuration = 0.1f;
+        
+        // 旋转
+        public Vector2 LookDelta { get; private set; }
 
         public void Init() {
             GameplayEvent.OnInputStateTick += OnHandleInputState;
@@ -21,6 +24,7 @@ namespace Code.Client.Player {
 
         private void OnHandleInputState(int index, GameInput.PlayerInputState state) {
             SmoothMoveInput(state);
+            LookDelta = state.LookDelta;
         }
 
         private void SmoothMoveInput(GameInput.PlayerInputState state) {

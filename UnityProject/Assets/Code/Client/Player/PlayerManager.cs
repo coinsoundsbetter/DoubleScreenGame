@@ -31,19 +31,21 @@ namespace Code.Client.Player {
 
         private void OnPlayerNetSpawn(PlayerNet net) {
             int id = net.GameId.Value;
+            Player player = null;
             if (net.IsOwner) {
-                var localPlayer = new LocalPlayer {
-                    LocalPlayerIndex = LocalPlayerNum++
+                player = new LocalPlayer {
+                    LocalPlayerIndex = LocalPlayerNum++,
+                    GameId = id,
                 };
-                localPlayer.Initialize();
-                _allPlayers.Add(id, localPlayer);
             }else {
-                var otherPlayer = new RemotePlayer();
-                otherPlayer.Initialize();
-                _allPlayers.Add(id, otherPlayer);
+                player = new RemotePlayer() {
+                    GameId = id,
+                };
             }
             
+            _allPlayers.Add(id, player);
             _allPlayerNets.Add(id, net);
+            player.Initialize();
         }
         
         private void OnPlayerNetDespawn(PlayerNet net) {

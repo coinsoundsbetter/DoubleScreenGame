@@ -141,6 +141,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 05c50c4949f949eb8dc4b9e962b224c6, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  defaultOffset: {x: 0, y: 0, z: 5}
+  defaultOffset: {x: 0, y: -2, z: 4.51}
   defaultFollowSpeed: {x: 30, y: 30, z: 15}
-  defaultRotateSpeed: 30
+  defaultRotateSpeed: {x: 10, y: 10}
+  defaultXAngleLimit: {x: -20, y: 80}

@@ -9,6 +9,7 @@ namespace Code.Client.Input {
         private Dictionary<int, PlayerInputState> inputStates;
         public struct PlayerInputState {
             public Vector2 MoveValue;
+            public Vector2 LookDelta;
         }
         
         public void OnCreate() {
@@ -18,14 +19,28 @@ namespace Code.Client.Input {
             inputManager = instance.GetComponent<PlayerInputManager>();
             inputManager.onPlayerJoined += OnPlayerJoined;
             inputManager.onPlayerLeft += OnPlayerLeft;
+            Cursor.lockState = CursorLockMode.Locked;
         }
 
         public void OnDestroy() {
             inputManager.onPlayerJoined -= OnPlayerJoined;
             inputManager.onPlayerLeft -= OnPlayerLeft;
         }
+
+#if UNITY_EDITOR
+        private bool isEnableInput = true;
+#endif
         
         public void OnUpdate(ref FeatureState state) {
+#if UNITY_EDITOR
+            if (UnityEngine.Input.GetKeyDown(KeyCode.T)) {
+                isEnableInput = !isEnableInput;
+            }
+#endif
+            if (!isEnableInput) {
+                return;
+            }
+            
             foreach (var kvp in inputs) {
                 var index = kvp.Key;
                 var inputState = inputStates[index];
@@ -59,10 +74,9 @@ namespace Code.Client.Input {
                 moveValue.y = -1;
             }
             state.MoveValue = moveValue;
-        }
 
-        public PlayerInputState GetState(int playerIndex) {
-            return inputStates.GetValueOrDefault(playerIndex);
+            var lookDelta = actions["Look"].ReadValue<Vector2>();
+            state.LookDelta = lookDelta;
         }
     }
 }
