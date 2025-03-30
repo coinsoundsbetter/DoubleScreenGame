@@ -9,6 +9,8 @@ namespace Code.Client.Player {
         
         public Transform GetCameraTarget() => cameraTarget;
         public Quaternion GetBodyRotation() => bodyDir.rotation;
+        
+        public Vector3 GetPlayerPos() => transform.position;
 
         public void SetBodyRotation(Quaternion rotation) {
             bodyDir.rotation = rotation;

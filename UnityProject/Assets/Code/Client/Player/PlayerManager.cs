@@ -8,6 +8,7 @@ namespace Code.Client.Player {
         public int LocalPlayerNum { get; private set; } = 0;
 
         public void OnCreate() {
+            LocalNet.Create();
             GameplayEvent.OnPlayerNetSpawn += OnPlayerNetSpawn;
             GameplayEvent.OnPlayerNetDespawn += OnPlayerNetDespawn;
         }
@@ -43,6 +44,7 @@ namespace Code.Client.Player {
                 };
             }
             
+            LocalNet.Instance.SetNetChannel(id, net);
             _allPlayers.Add(id, player);
             _allPlayerNets.Add(id, net);
             player.Initialize();

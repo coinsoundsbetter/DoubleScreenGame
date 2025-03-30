@@ -19,7 +19,6 @@ namespace Code.Client.Input {
             inputManager = instance.GetComponent<PlayerInputManager>();
             inputManager.onPlayerJoined += OnPlayerJoined;
             inputManager.onPlayerLeft += OnPlayerLeft;
-            Cursor.lockState = CursorLockMode.Locked;
         }
 
         public void OnDestroy() {

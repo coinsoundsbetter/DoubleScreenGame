@@ -1,5 +1,7 @@
+using System;
 using Unity.Netcode;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 namespace Code {
     public class GameContext : MonoBehaviour {
@@ -15,7 +17,14 @@ namespace Code {
             Instance = this;
             DontDestroyOnLoad(gameObject);
         }
-        
+
+        private void Start() {
+            IsStartServer = BoostrapConfig.Instance.IsStartServer;
+            IsStartClient = BoostrapConfig.Instance.IsStartClient;
+            SceneManager.LoadScene("rpgpp_lt_scene_1.0", LoadSceneMode.Additive);
+            EnterGame();
+        }
+
         private void OnDestroy() {
             ShutGame();
             Instance = null;
@@ -31,20 +40,9 @@ namespace Code {
             ServerFeatures?.LateUpdate();
         }
 
-        private bool isEnter;
-        private void OnGUI() {
-            if (!isEnter && GUILayout.Button("以主机开始游戏")) {
-                EnterGame(true, true);
-                isEnter = true;
-            }
-        }
-
-        private void EnterGame(bool isServer, bool isClient) {
-            IsStartServer = isServer;
-            IsStartClient = isClient;
-            
+        private void EnterGame() {
             // 创建服务器的基础功能
-            if (isServer) {
+            if (IsStartServer) {
                 ServerFeatures = new FeatureManager();
                 ServerFeatures.CreateBatch()
                     .Add<Server.Connection.ConnectionManager>()
@@ -53,7 +51,7 @@ namespace Code {
             }
             
             // 创建客户端的基础功能
-            if (isClient) {
+            if (IsStartClient) {
                 ClientFeatures = new FeatureManager();
                 ClientFeatures.CreateBatch()
                     .Add<Client.Input.GameInput>()
@@ -64,12 +62,16 @@ namespace Code {
             
             // 执行网络连接
             var networkMgr = NetworkManager.Singleton;
-            if (isServer && isClient) {
-                networkMgr.StartHost();
-            }else if (isServer) {
-                networkMgr.StartServer();
-            }else {
-                networkMgr.StartClient();
+            switch (IsStartServer) {
+                case true when IsStartClient:
+                    networkMgr.StartHost();
+                    break;
+                case true:
+                    networkMgr.StartServer();
+                    break;
+                default:
+                    networkMgr.StartClient();
+                    break;
             }
         }
 

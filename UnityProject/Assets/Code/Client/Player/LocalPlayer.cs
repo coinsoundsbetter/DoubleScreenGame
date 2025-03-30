@@ -38,6 +38,7 @@ namespace Code.Client.Player {
         public override void Update() {
             ControlBodyDir();
             ControlMove();
+            SendState();
         }
 
         public override void LateUpdate() {
@@ -80,6 +81,10 @@ namespace Code.Client.Player {
             
             // 应用移动
             _view.MoveOnce(moveMotion);
+        }
+
+        private void SendState() {
+            LocalNet.Instance.SendPos(GameId, _view.GetPlayerPos());
         }
     }
 }

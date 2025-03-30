@@ -1,5 +1,6 @@
 using Unity.Collections;
 using Unity.Netcode;
+using UnityEngine;
 
 namespace Code.Mix {
     public class PlayerNet : NetworkBehaviour {
@@ -12,6 +13,14 @@ namespace Code.Mix {
 
         public override void OnNetworkDespawn() {
             GameplayEvent.OnPlayerNetDespawn(this);
+        }
+
+        public void SetPos(Vector3 pos) {
+            transform.position = pos;
+        }
+
+        public Vector3 GetPos() {
+            return transform.position;
         }
     }
 }
